@@ -37,7 +37,10 @@ export namespace Login {
     password: string;
   }
   export interface ResLogin {
-    access_token: string;
+    // access_token: string;
+    // Djangorest jwt默认返回的字段为access
+    access: string;
+    refresh: string;
   }
   export interface ResAuthButtons {
     [key: string]: string[];
