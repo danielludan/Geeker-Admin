@@ -1,5 +1,5 @@
 import { ResPage, User } from "@/api/interface/index";
-import { PORT1 } from "@/api/config/servicePort";
+import { PORT1, PORT3 } from "@/api/config/servicePort";
 import http from "@/api";
 
 /**
@@ -7,7 +7,7 @@ import http from "@/api";
  */
 // 获取用户列表
 export const getUserList = (params: User.ReqUserParams) => {
-  return http.post<ResPage<User.ResUserList>>(PORT1 + `/user/list`, params);
+  return http.get<ResPage<User.ResUserList>>(PORT3 + `/user/list`, params);
 };
 
 // 获取树形用户列表

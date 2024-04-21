@@ -7,6 +7,7 @@
       :init-param="initParam"
       :data-callback="dataCallback"
       @darg-sort="sortTable"
+      @sort-change="handleSortChange"
     >
       <!-- 表格 header 按钮 -->
       <template #tableHeader="scope">
@@ -53,25 +54,13 @@ import { useRouter } from "vue-router";
 import { User } from "@/api/interface";
 import { useHandleData } from "@/hooks/useHandleData";
 import { useDownload } from "@/hooks/useDownload";
-import { useAuthButtons } from "@/hooks/useAuthButtons";
 import { ElMessage, ElMessageBox } from "element-plus";
 import ProTable from "@/components/ProTable/index.vue";
 import ImportExcel from "@/components/ImportExcel/index.vue";
 import UserDrawer from "@/views/proTable/components/UserDrawer.vue";
 import { ProTableInstance, ColumnProps, HeaderRenderScope } from "@/components/ProTable/interface";
 import { CirclePlus, Delete, EditPen, Download, Upload, View, Refresh } from "@element-plus/icons-vue";
-import {
-  getUserList,
-  deleteUser,
-  editUser,
-  addUser,
-  changeUserStatus,
-  resetUserPassWord,
-  exportUserInfo,
-  BatchAddUser,
-  getUserStatus,
-  getUserGender
-} from "@/api/modules/user";
+import { getUserList, deleteUser, editUser, addUser, resetUserPassWord, exportUserInfo, BatchAddUser } from "@/api/modules/user";
 
 const router = useRouter();
 
@@ -101,14 +90,18 @@ const dataCallback = (data: any) => {
 // 默认不做操作就直接在 ProTable 组件上绑定	:requestApi="getUserList"
 const getTableList = (params: any) => {
   let newParams = JSON.parse(JSON.stringify(params));
-  newParams.createTime && (newParams.startTime = newParams.createTime[0]);
-  newParams.createTime && (newParams.endTime = newParams.createTime[1]);
-  delete newParams.createTime;
+  // newParams.createTime && (newParams.startTime = newParams.createTime[0]);
+  // newParams.createTime && (newParams.endTime = newParams.createTime[1]);
+  // delete newParams.createTime;
+  if (newParams.last_login && newParams.last_login.length > 0) {
+    newParams.last_login_after = newParams.last_login[0];
+    newParams.last_login_before = newParams.last_login[1];
+    delete newParams.last_login;
+  }
   return getUserList(newParams);
 };
 
 // 页面按钮权限（按钮权限既可以使用 hooks，也可以直接使用 v-auth 指令，指令适合直接绑定在按钮上，hooks 适合根据按钮权限显示不同的内容）
-const { BUTTONS } = useAuthButtons();
 
 // 自定义渲染表头（使用tsx语法）
 const headerRender = (scope: HeaderRenderScope<User.ResUserList>) => {
@@ -127,81 +120,47 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
   {
     prop: "username",
     label: "用户姓名",
-    search: { el: "input", tooltip: "我是搜索提示" },
+    search: { el: "input", tooltip: "用户名支持模糊搜索" },
     render: scope => {
       return (
         <el-button type="primary" link onClick={() => ElMessage.success("我是通过 tsx 语法渲染的内容")}>
           {scope.row.username}
         </el-button>
       );
-    }
+    },
+    sortable: true
+  },
+  { prop: "email", label: "邮箱" },
+  {
+    prop: "is_active",
+    label: "激活",
+    search: { el: "checkbox", tooltip: "用户名是否激活", defaultValue: true }
   },
   {
-    prop: "gender",
-    label: "性别",
+    prop: "is_superuser",
+    label: "管理员",
     // 字典数据（本地数据）
     // enum: genderType,
     // 字典请求不带参数
-    enum: getUserGender,
+    enum: [
+      { label: "是", value: true },
+      { label: "否", value: false }
+    ],
     // 字典请求携带参数
     // enum: () => getUserGender({ id: 1 }),
-    search: { el: "select", props: { filterable: true } },
-    fieldNames: { label: "genderLabel", value: "genderValue" }
+    search: { el: "select" },
+    fieldNames: { label: "label", value: "value" }
   },
   {
-    // 多级 prop
-    prop: "user.detail.age",
-    label: "年龄",
-    search: {
-      // 自定义 search 显示内容
-      render: ({ searchParam }) => {
-        return (
-          <div class="flx-center">
-            <el-input vModel_trim={searchParam.minAge} placeholder="最小年龄" />
-            <span class="mr10 ml10">-</span>
-            <el-input vModel_trim={searchParam.maxAge} placeholder="最大年龄" />
-          </div>
-        );
-      }
-    }
-  },
-  { prop: "idCard", label: "身份证号", search: { el: "input" } },
-  { prop: "email", label: "邮箱" },
-  { prop: "address", label: "居住地址" },
-  {
-    prop: "status",
-    label: "用户状态",
-    enum: getUserStatus,
-    search: { el: "tree-select", props: { filterable: true } },
-    fieldNames: { label: "userLabel", value: "userStatus" },
-    render: scope => {
-      return (
-        <>
-          {BUTTONS.value.status ? (
-            <el-switch
-              model-value={scope.row.status}
-              active-text={scope.row.status ? "启用" : "禁用"}
-              active-value={1}
-              inactive-value={0}
-              onClick={() => changeStatus(scope.row)}
-            />
-          ) : (
-            <el-tag type={scope.row.status ? "success" : "danger"}>{scope.row.status ? "启用" : "禁用"}</el-tag>
-          )}
-        </>
-      );
-    }
-  },
-  {
-    prop: "createTime",
-    label: "创建时间",
+    prop: "last_login",
+    label: "最近登录时间",
     headerRender,
     width: 180,
     search: {
       el: "date-picker",
       span: 2,
-      props: { type: "datetimerange", valueFormat: "YYYY-MM-DD HH:mm:ss" },
-      defaultValue: ["2022-11-12 11:35:00", "2022-12-12 11:35:00"]
+      props: { type: "daterange", valueFormat: "YYYY-MM-DD" }
+      // defaultValue: [new Date().toISOString().slice(0, 10), new Date().toISOString().slice(0, 10)]
     }
   },
   { prop: "operation", label: "操作", fixed: "right", width: 330 }
@@ -230,12 +189,6 @@ const batchDelete = async (id: string[]) => {
 // 重置用户密码
 const resetPass = async (params: User.ResUserList) => {
   await useHandleData(resetUserPassWord, { id: params.id }, `重置【${params.username}】用户密码`);
-  proTable.value?.getTableList();
-};
-
-// 切换用户状态
-const changeStatus = async (row: User.ResUserList) => {
-  await useHandleData(changeUserStatus, { id: row.id, status: row.status == 1 ? 0 : 1 }, `切换【${row.username}】用户状态`);
   proTable.value?.getTableList();
 };
 
@@ -270,4 +223,18 @@ const openDrawer = (title: string, row: Partial<User.ResUserList> = {}) => {
   };
   drawerRef.value?.acceptParams(params);
 };
+
+const handleSortChange = sortInfo => {
+  // sortInfo 包含了排序的相关信息，如排序字段和方向
+  // 构建请求参数
+  const params = {
+    ...initParam, // 确保带上初始化参数
+    ordering: sortInfo.column.property + (sortInfo.order === "asc" ? "" : ",desc")
+  };
+
+  // 使用 ProTable 实例来重新获取数据
+  proTable.value?.clearSelection();
+  proTable.value?.getTableList(params);
+};
+console.log(handleSortChange);
 </script>
