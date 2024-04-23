@@ -15,3 +15,8 @@ export const userStatus = [
   { label: "启用", value: 1, tagType: "success" },
   { label: "禁用", value: 0, tagType: "danger" }
 ];
+
+export const adminStatus = [
+  { label: "管理员", value: 1 },
+  { label: "普通用户", value: 0 }
+];

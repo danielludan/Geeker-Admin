@@ -66,7 +66,7 @@ class RequestHttp {
           return Promise.reject(data);
         }
         // 全局错误信息拦截（防止下载文件的时候返回数据流，没有 code 直接报错）
-        if (data.code && data.code !== ResultEnum.SUCCESS) {
+        if (data.code && data.code !== ResultEnum.SUCCESS && data.code !== ResultEnum.SUCCESS_204) {
           ElMessage.error(data.msg);
           return Promise.reject(data);
         }
@@ -99,6 +99,9 @@ class RequestHttp {
   }
   put<T>(url: string, params?: object, _object = {}): Promise<ResultData<T>> {
     return this.service.put(url, params, _object);
+  }
+  patch<T>(url: string, params?: object, _object = {}): Promise<ResultData<T>> {
+    return this.service.patch(url, params, _object);
   }
   delete<T>(url: string, params?: any, _object = {}): Promise<ResultData<T>> {
     return this.service.delete(url, { params, ..._object });

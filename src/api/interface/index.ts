@@ -58,7 +58,8 @@ export namespace User {
     createTime: string[];
     status: number;
   }
-  export interface ResUserList {
+
+  export interface BaseUser {
     id: string;
     username: string;
     is_active: boolean;
@@ -69,6 +70,10 @@ export namespace User {
     email: string;
     last_login: Date;
   }
+
+  export interface ResUserList extends BaseUser {}
+
+  export interface ResUserDetail extends BaseUser {}
   export interface ResStatus {
     userLabel: string;
     userValue: number;

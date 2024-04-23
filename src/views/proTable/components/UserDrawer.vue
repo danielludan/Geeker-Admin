@@ -30,6 +30,18 @@
       <el-form-item label="用户姓名" prop="username">
         <el-input v-model="drawerProps.row!.username" placeholder="请填写用户姓名" clearable></el-input>
       </el-form-item>
+      <el-form-item label="状态" prop="is_active">
+        <el-checkbox v-model="drawerProps.row!.is_active" label="激活" size="large" />
+      </el-form-item>
+      <el-form-item label="管理员" prop="is_superuser">
+        <el-checkbox v-model="drawerProps.row!.is_superuser" label="管理员" size="large" />
+      </el-form-item>
+      <el-form-item label="员工" prop="is_staff">
+        <el-checkbox v-model="drawerProps.row!.is_staff" label="员工" size="large" />
+      </el-form-item>
+      <el-form-item label="邮箱" prop="email">
+        <el-input v-model="drawerProps.row!.email" placeholder="请填写邮箱" clearable></el-input>
+      </el-form-item>
       <el-form-item label="性别" prop="gender">
         <el-select v-model="drawerProps.row!.gender" placeholder="请选择性别" clearable>
           <el-option v-for="item in genderType" :key="item.value" :label="item.label" :value="item.value" />
@@ -38,11 +50,11 @@
       <el-form-item label="身份证号" prop="idCard">
         <el-input v-model="drawerProps.row!.idCard" placeholder="请填写身份证号" clearable></el-input>
       </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="drawerProps.row!.email" placeholder="请填写邮箱" clearable></el-input>
-      </el-form-item>
       <el-form-item label="居住地址" prop="address">
         <el-input v-model="drawerProps.row!.address" placeholder="请填写居住地址" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="上一次登录" prop="last_login">
+        <el-input v-model="drawerProps.row!.last_login" readonly></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -61,19 +73,19 @@ import UploadImg from "@/components/Upload/Img.vue";
 import UploadImgs from "@/components/Upload/Imgs.vue";
 
 const rules = reactive({
-  avatar: [{ required: true, message: "请上传用户头像" }],
-  photo: [{ required: true, message: "请上传用户照片" }],
+  // avatar: [{ required: true, message: "请上传用户头像" }],
+  // photo: [{ required: true, message: "请上传用户照片" }],
   username: [{ required: true, message: "请填写用户姓名" }],
-  gender: [{ required: true, message: "请选择性别" }],
-  idCard: [{ required: true, message: "请填写身份证号" }],
-  email: [{ required: true, message: "请填写邮箱" }],
-  address: [{ required: true, message: "请填写居住地址" }]
+  // gender: [{ required: true, message: "请选择性别" }],
+  // idCard: [{ required: true, message: "请填写身份证号" }],
+  email: [{ required: false, message: "请填写邮箱" }]
+  // address: [{ required: true, message: "请填写居住地址" }]
 });
 
 interface DrawerProps {
   title: string;
   isView: boolean;
-  row: Partial<User.ResUserList>;
+  row: Partial<User.ResUserDetail>;
   api?: (params: any) => Promise<any>;
   getTableList?: () => void;
 }

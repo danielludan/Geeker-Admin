@@ -7,7 +7,7 @@ import http from "@/api";
  */
 // 获取用户列表
 export const getUserList = (params: User.ReqUserParams) => {
-  return http.get<ResPage<User.ResUserList>>(PORT3 + `/user/list`, params);
+  return http.get<ResPage<User.ResUserList>>(PORT3 + `/user/`, params);
 };
 
 // 获取树形用户列表
@@ -17,7 +17,7 @@ export const getUserTreeList = (params: User.ReqUserParams) => {
 
 // 新增用户
 export const addUser = (params: { id: string }) => {
-  return http.post(PORT1 + `/user/add`, params);
+  return http.post(PORT3 + `/user/`, params);
 };
 
 // 批量添加用户
@@ -27,12 +27,12 @@ export const BatchAddUser = (params: FormData) => {
 
 // 编辑用户
 export const editUser = (params: { id: string }) => {
-  return http.post(PORT1 + `/user/edit`, params);
+  return http.patch(PORT3 + `/user/${params.id}/`, params);
 };
 
 // 删除用户
 export const deleteUser = (params: { id: string[] }) => {
-  return http.post(PORT1 + `/user/delete`, params);
+  return http.delete(PORT3 + `/user/${params.id}/`, null);
 };
 
 // 切换用户状态
