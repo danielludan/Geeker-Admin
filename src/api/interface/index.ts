@@ -75,7 +75,7 @@ export namespace User {
   export interface UserProfile {
     avatar: string;
     address: string;
-    gender: number;
+    gender: number | null;
     phone: string;
   }
   export interface ResUserList extends BaseUser {

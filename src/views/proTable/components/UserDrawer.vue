@@ -9,7 +9,7 @@
       :model="drawerProps.row"
       :hide-required-asterisk="drawerProps.isView"
     >
-      <!-- <el-form-item label="用户头像" prop="profile.avatar">
+      <el-form-item label="用户头像" prop="profile.avatar">
         <UploadImg v-model:image-url="drawerProps.row!.profile!.avatar" width="135px" height="135px" :file-size="3">
           <template #empty>
             <el-icon><Avatar /></el-icon>
@@ -17,7 +17,7 @@
           </template>
           <template #tip> 头像大小不能超过 3M </template>
         </UploadImg>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item label="用户姓名" prop="username">
         <el-input v-model="drawerProps.row!.username" placeholder="请填写用户姓名" clearable></el-input>
       </el-form-item>
@@ -36,17 +36,18 @@
       <el-form-item label="邮箱" prop="email">
         <el-input v-model="drawerProps.row!.email" placeholder="请填写邮箱" clearable></el-input>
       </el-form-item>
-      <!-- <el-form-item label="性别" prop="profile.gender">
-        <el-select v-model="drawerProps.row!.profile!.gender" placeholder="请选择性别" clearable>
+
+      <el-form-item label="性别" prop="profile.gender">
+        <el-select v-model="drawerProps.row!.profile.gender" placeholder="请选择性别" clearable>
           <el-option v-for="item in genderType" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="手机" prop="profile.phone">
-        <el-input v-model="drawerProps.row!.profile!.phone" placeholder="请填写手机号" clearable></el-input>
+        <el-input v-model="drawerProps.row!.profile.phone" placeholder="请填写手机号" clearable></el-input>
       </el-form-item>
       <el-form-item label="居住地址" prop="profile.address">
-        <el-input v-model="drawerProps.row!.profile!.address" placeholder="请填写居住地址" clearable></el-input>
-      </el-form-item> -->
+        <el-input v-model="drawerProps.row!.profile.address" placeholder="请填写居住地址" clearable></el-input>
+      </el-form-item>
       <el-form-item label="上一次登录" prop="last_login">
         <el-input v-model="drawerProps.row!.last_login" readonly></el-input>
       </el-form-item>
@@ -59,16 +60,17 @@
 </template>
 
 <script setup lang="ts" name="UserDrawer">
-import { ref, reactive } from "vue";
-// import { genderType } from "@/utils/dict";
+import { ref, reactive, onMounted } from "vue";
+import { genderType } from "@/utils/dict";
 import { ElMessage, FormInstance } from "element-plus";
 import { User } from "@/api/interface";
-// import UploadImg from "@/components/Upload/Img.vue";
+import UploadImg from "@/components/Upload/Img.vue";
 
 const rules = reactive({
   // avatar: [{ required: true, message: "请上传用户头像" }],
   // photo: [{ required: true, message: "请上传用户照片" }],
   username: [{ required: true, message: "请填写用户姓名" }],
+  password: [{ required: true, message: "请填写密码" }],
   // gender: [{ required: true, message: "请选择性别" }],
   // idCard: [{ required: true, message: "请填写身份证号" }],
   email: [{ required: false, message: "请填写邮箱" }]
@@ -91,8 +93,23 @@ const drawerProps = ref<DrawerProps>({
   row: {}
 });
 
+// const nestObj = ref({
+//   a: "a",
+//   b: {
+//     c: "rere",
+//     d: "2"
+//   }
+// });
+
+// const profile = ref({ gender: "", avatar: "", phone: "", address: "" });
+
+// console.log(profile);
 // 接收父组件传过来的参数
 const acceptParams = (params: DrawerProps) => {
+  // 如果没有row
+  if (!params.row.profile) {
+    params.row.profile = { avatar: "", gender: null, address: "", phone: "" };
+  }
   drawerProps.value = params;
   drawerVisible.value = true;
 };
@@ -112,6 +129,14 @@ const handleSubmit = () => {
     }
   });
 };
+
+onMounted(() => {
+  // Perform actions after template rendering
+  console.log("Template mounted!");
+
+  // Access DOM elements within the template
+  console.log(drawerProps.value.row);
+});
 
 defineExpose({
   acceptParams
