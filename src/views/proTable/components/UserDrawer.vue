@@ -9,26 +9,20 @@
       :model="drawerProps.row"
       :hide-required-asterisk="drawerProps.isView"
     >
-      <el-form-item label="用户头像" prop="avatar">
-        <UploadImg v-model:image-url="drawerProps.row!.avatar" width="135px" height="135px" :file-size="3">
+      <!-- <el-form-item label="用户头像" prop="profile.avatar">
+        <UploadImg v-model:image-url="drawerProps.row!.profile!.avatar" width="135px" height="135px" :file-size="3">
           <template #empty>
             <el-icon><Avatar /></el-icon>
             <span>请上传头像</span>
           </template>
           <template #tip> 头像大小不能超过 3M </template>
         </UploadImg>
-      </el-form-item>
-      <el-form-item label="用户照片" prop="photo">
-        <UploadImgs v-model:file-list="drawerProps.row!.photo" height="140px" width="140px" border-radius="50%">
-          <template #empty>
-            <el-icon><Picture /></el-icon>
-            <span>请上传照片</span>
-          </template>
-          <template #tip> 照片大小不能超过 5M </template>
-        </UploadImgs>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="用户姓名" prop="username">
         <el-input v-model="drawerProps.row!.username" placeholder="请填写用户姓名" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="用户密码" prop="password">
+        <el-input v-model="drawerProps.row!.password" placeholder="请填写用户密码" clearable show-password></el-input>
       </el-form-item>
       <el-form-item label="状态" prop="is_active">
         <el-checkbox v-model="drawerProps.row!.is_active" label="激活" size="large" />
@@ -42,17 +36,17 @@
       <el-form-item label="邮箱" prop="email">
         <el-input v-model="drawerProps.row!.email" placeholder="请填写邮箱" clearable></el-input>
       </el-form-item>
-      <el-form-item label="性别" prop="gender">
-        <el-select v-model="drawerProps.row!.gender" placeholder="请选择性别" clearable>
+      <!-- <el-form-item label="性别" prop="profile.gender">
+        <el-select v-model="drawerProps.row!.profile!.gender" placeholder="请选择性别" clearable>
           <el-option v-for="item in genderType" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </el-form-item>
-      <el-form-item label="身份证号" prop="idCard">
-        <el-input v-model="drawerProps.row!.idCard" placeholder="请填写身份证号" clearable></el-input>
+      <el-form-item label="手机" prop="profile.phone">
+        <el-input v-model="drawerProps.row!.profile!.phone" placeholder="请填写手机号" clearable></el-input>
       </el-form-item>
-      <el-form-item label="居住地址" prop="address">
-        <el-input v-model="drawerProps.row!.address" placeholder="请填写居住地址" clearable></el-input>
-      </el-form-item>
+      <el-form-item label="居住地址" prop="profile.address">
+        <el-input v-model="drawerProps.row!.profile!.address" placeholder="请填写居住地址" clearable></el-input>
+      </el-form-item> -->
       <el-form-item label="上一次登录" prop="last_login">
         <el-input v-model="drawerProps.row!.last_login" readonly></el-input>
       </el-form-item>
@@ -66,11 +60,10 @@
 
 <script setup lang="ts" name="UserDrawer">
 import { ref, reactive } from "vue";
-import { genderType } from "@/utils/dict";
+// import { genderType } from "@/utils/dict";
 import { ElMessage, FormInstance } from "element-plus";
 import { User } from "@/api/interface";
-import UploadImg from "@/components/Upload/Img.vue";
-import UploadImgs from "@/components/Upload/Imgs.vue";
+// import UploadImg from "@/components/Upload/Img.vue";
 
 const rules = reactive({
   // avatar: [{ required: true, message: "请上传用户头像" }],
@@ -79,6 +72,7 @@ const rules = reactive({
   // gender: [{ required: true, message: "请选择性别" }],
   // idCard: [{ required: true, message: "请填写身份证号" }],
   email: [{ required: false, message: "请填写邮箱" }]
+
   // address: [{ required: true, message: "请填写居住地址" }]
 });
 

@@ -62,6 +62,7 @@ export namespace User {
   export interface BaseUser {
     id: string;
     username: string;
+    password: string;
     is_active: boolean;
     is_superuser: boolean;
     is_staff: boolean;
@@ -71,9 +72,19 @@ export namespace User {
     last_login: Date;
   }
 
-  export interface ResUserList extends BaseUser {}
+  export interface UserProfile {
+    avatar: string;
+    address: string;
+    gender: number;
+    phone: string;
+  }
+  export interface ResUserList extends BaseUser {
+    profile: UserProfile;
+  }
 
-  export interface ResUserDetail extends BaseUser {}
+  export interface ResUserDetail extends BaseUser {
+    profile: UserProfile;
+  }
   export interface ResStatus {
     userLabel: string;
     userValue: number;
