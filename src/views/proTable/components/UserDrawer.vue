@@ -48,6 +48,9 @@
       <el-form-item label="居住地址" prop="profile.address">
         <el-input v-model="drawerProps.row!.profile.address" placeholder="请填写居住地址" clearable></el-input>
       </el-form-item>
+      <el-form-item label="地区" prop="userAreaGroup.id">
+        <el-tree-select v-model="drawerProps.row!.profile.userAreaGroupId" :data="areaGroupData" />
+      </el-form-item>
       <el-form-item label="上一次登录" prop="last_login">
         <el-input v-model="drawerProps.row!.last_login" readonly></el-input>
       </el-form-item>
@@ -65,6 +68,7 @@ import { genderType } from "@/utils/dict";
 import { ElMessage, FormInstance } from "element-plus";
 import { User } from "@/api/interface";
 import UploadImg from "@/components/Upload/Img.vue";
+import { getAreaGroupTreeSelect } from "@/api/modules/group";
 
 const rules = reactive({
   // avatar: [{ required: true, message: "请上传用户头像" }],
@@ -93,22 +97,12 @@ const drawerProps = ref<DrawerProps>({
   row: {}
 });
 
-// const nestObj = ref({
-//   a: "a",
-//   b: {
-//     c: "rere",
-//     d: "2"
-//   }
-// });
-
-// const profile = ref({ gender: "", avatar: "", phone: "", address: "" });
-
 // console.log(profile);
 // 接收父组件传过来的参数
 const acceptParams = (params: DrawerProps) => {
   // 如果没有row
   if (!params.row.profile) {
-    params.row.profile = { avatar: "", gender: null, address: "", phone: "" };
+    params.row.profile = { avatar: "", gender: null, address: "", phone: "", userAreaGroupId: null };
   }
   drawerProps.value = params;
   drawerVisible.value = true;
@@ -130,12 +124,20 @@ const handleSubmit = () => {
   });
 };
 
+const areaGroupData = ref({});
+
+const getUserAreaGroupData = async () => {
+  const { data } = await getAreaGroupTreeSelect();
+  areaGroupData.value = data;
+};
+
 onMounted(() => {
   // Perform actions after template rendering
   console.log("Template mounted!");
 
   // Access DOM elements within the template
   console.log(drawerProps.value.row);
+  getUserAreaGroupData();
 });
 
 defineExpose({
