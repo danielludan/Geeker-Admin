@@ -48,8 +48,8 @@
       <el-form-item label="居住地址" prop="profile.address">
         <el-input v-model="drawerProps.row!.profile.address" placeholder="请填写居住地址" clearable></el-input>
       </el-form-item>
-      <el-form-item label="地区" prop="userAreaGroup.id">
-        <el-tree-select v-model="drawerProps.row!.profile.userAreaGroupId" :data="areaGroupData" />
+      <el-form-item label="地区" prop="profile.user_area_group_id">
+        <el-tree-select v-model="drawerProps.row!.profile.user_area_group_id" :data="areaGroupData" />
       </el-form-item>
       <el-form-item label="上一次登录" prop="last_login">
         <el-input v-model="drawerProps.row!.last_login" readonly></el-input>
@@ -102,7 +102,7 @@ const drawerProps = ref<DrawerProps>({
 const acceptParams = (params: DrawerProps) => {
   // 如果没有row
   if (!params.row.profile) {
-    params.row.profile = { avatar: "", gender: null, address: "", phone: "", userAreaGroupId: null };
+    params.row.profile = { avatar: "", gender: null, address: "", phone: "", user_area_group_id: null };
   }
   drawerProps.value = params;
   drawerVisible.value = true;
