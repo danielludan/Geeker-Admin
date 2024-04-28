@@ -131,7 +131,7 @@ const columns = reactive<ColumnProps<User.ResUserList>[]>([
     sortable: true
   },
   { prop: "email", label: "邮箱" },
-  { prop: "profile", label: "手机" },
+  // { prop: "profile", label: "手机" },
   {
     prop: "is_active",
     label: "激活",

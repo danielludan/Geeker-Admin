@@ -49,7 +49,7 @@
         <el-input v-model="drawerProps.row!.profile.address" placeholder="请填写居住地址" clearable></el-input>
       </el-form-item>
       <el-form-item label="地区" prop="profile.user_area_group_id">
-        <el-tree-select v-model="drawerProps.row!.profile.user_area_group_id" :data="areaGroupData" />
+        <el-tree-select v-model="drawerProps.row!.profile.user_area_group_id" :data="areaGroupData" null="True" />
       </el-form-item>
       <el-form-item label="上一次登录" prop="last_login">
         <el-input v-model="drawerProps.row!.last_login" readonly></el-input>
@@ -128,7 +128,12 @@ const areaGroupData = ref({});
 
 const getUserAreaGroupData = async () => {
   const { data } = await getAreaGroupTreeSelect();
-  areaGroupData.value = data;
+  // Create the empty option object
+  const emptyOption = { value: null, label: "None" };
+
+  // Prepend the empty option to the data array
+  const updatedData = [emptyOption, ...data];
+  areaGroupData.value = updatedData;
 };
 
 onMounted(() => {
