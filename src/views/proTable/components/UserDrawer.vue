@@ -129,7 +129,7 @@ const areaGroupData = ref({});
 const getUserAreaGroupData = async () => {
   const { data } = await getAreaGroupTreeSelect();
   // Create the empty option object
-  const emptyOption = { value: null, label: "None" };
+  const emptyOption = { value: null, label: "无" };
 
   // Prepend the empty option to the data array
   const updatedData = [emptyOption, ...data];

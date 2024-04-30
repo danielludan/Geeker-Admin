@@ -49,7 +49,7 @@ interface TreeFilterProps {
   defaultValue?: any; // 默认选中的值 ==> 非必传
 }
 const props = withDefaults(defineProps<TreeFilterProps>(), {
-  id: "id",
+  id: "value",
   label: "label",
   multiple: false
 });
