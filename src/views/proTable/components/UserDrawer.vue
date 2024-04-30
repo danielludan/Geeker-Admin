@@ -51,6 +51,9 @@
       <el-form-item label="地区" prop="profile.user_area_group_id">
         <el-tree-select v-model="drawerProps.row!.profile.user_area_group_id" :data="areaGroupData" null="True" />
       </el-form-item>
+      <el-form-item label="部门" prop="profile.user_dept_group_ids">
+        <el-tree-select v-model="drawerProps.row!.profile.user_dept_group_ids" :data="deptGroupData" null="True" multiple />
+      </el-form-item>
       <el-form-item label="上一次登录" prop="last_login">
         <el-input v-model="drawerProps.row!.last_login" readonly></el-input>
       </el-form-item>
@@ -68,7 +71,7 @@ import { genderType } from "@/utils/dict";
 import { ElMessage, FormInstance } from "element-plus";
 import { User } from "@/api/interface";
 import UploadImg from "@/components/Upload/Img.vue";
-import { getAreaGroupTreeSelect } from "@/api/modules/group";
+import { getAreaGroupTreeSelect, getDeptGroupTreeSelect } from "@/api/modules/group";
 
 const rules = reactive({
   // avatar: [{ required: true, message: "请上传用户头像" }],
@@ -125,6 +128,7 @@ const handleSubmit = () => {
 };
 
 const areaGroupData = ref({});
+const deptGroupData = ref({});
 
 const getUserAreaGroupData = async () => {
   const { data } = await getAreaGroupTreeSelect();
@@ -136,13 +140,23 @@ const getUserAreaGroupData = async () => {
   areaGroupData.value = updatedData;
 };
 
+const getUserDeptGroupData = async () => {
+  const { data } = await getDeptGroupTreeSelect();
+  // Create the empty option object
+  const emptyOption = { value: null, label: "无" };
+
+  // Prepend the empty option to the data array
+  const updatedData = [emptyOption, ...data];
+  deptGroupData.value = updatedData;
+};
+
 onMounted(() => {
   // Perform actions after template rendering
   console.log("Template mounted!");
 
   // Access DOM elements within the template
-  console.log(drawerProps.value.row);
   getUserAreaGroupData();
+  getUserDeptGroupData();
 });
 
 defineExpose({

@@ -10,3 +10,12 @@ export const getAreaGroupTreeSelect = () => {
   const params = { group_type: "area" };
   return http.get<ResultData>(PORT3 + `/user_group/tree_select/`, params);
 };
+
+/**
+ * @name 地域组Tree
+ */
+// 获取用户列表
+export const getDeptGroupTreeSelect = () => {
+  const params = { group_type: "dept" };
+  return http.get<ResultData>(PORT3 + `/user_group/tree_select/`, params);
+};

@@ -78,6 +78,7 @@ export namespace User {
     gender: number | null;
     phone: string;
     userAreaGroupId: number | null;
+    userDeptGroupIds: [number] | null;
   }
   export interface ResUserList extends BaseUser {
     profile: UserProfile;
