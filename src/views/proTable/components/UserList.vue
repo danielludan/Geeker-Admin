@@ -238,4 +238,7 @@ const handleSortChange = sortInfo => {
   proTable.value?.getTableList(params);
 };
 console.log(handleSortChange);
+
+// 暴露给父组件使用
+defineExpose({ initParam, proTable });
 </script>
