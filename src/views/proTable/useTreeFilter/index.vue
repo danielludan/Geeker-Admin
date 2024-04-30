@@ -27,6 +27,6 @@ onMounted(async () => {
 const changeTreeFilter = (val: string[]) => {
   console.log("changeTreeFilter:" + val);
   proTable!.pageable.pageNum = 1;
-  initParam.areaGroupId = val;
+  initParam.user_area_group_id = val;
 };
 </script>
