@@ -7,6 +7,7 @@ import { ResultEnum } from "@/enums/httpEnum";
 import { checkStatus } from "./helper/checkStatus";
 import { useUserStore } from "@/stores/modules/user";
 import router from "@/routers";
+import qs from "qs";
 
 export interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   loading?: boolean;
@@ -18,7 +19,10 @@ const config = {
   // 设置超时时间
   timeout: ResultEnum.TIMEOUT as number,
   // 跨域时候允许携带凭证
-  withCredentials: true
+  withCredentials: true,
+  paramsSerializer: (params: any) => {
+    return qs.stringify(params, { indices: false }); // 使用qs库，但禁用其自动为数组添加方括号的行为
+  }
 };
 
 class RequestHttp {

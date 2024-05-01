@@ -215,7 +215,7 @@ const batchAdd = () => {
 // 打开 drawer(新增、查看、编辑)
 const drawerRef = ref<InstanceType<typeof UserDrawer> | null>(null);
 const openDrawer = (title: string, row: Partial<User.ResUserList> = {}) => {
-  // 实际提交表单用的是dept_app_group_ids， 因此这里做一次复制
+  // 实际提交表单用的是dept_app_group_ids， 因此这里做一次复制。之后dept_app_groups可能会传入对象而非仅仅是id
   row.dept_app_group_ids = row.dept_app_groups;
   const params = {
     title,
