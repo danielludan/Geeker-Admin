@@ -51,8 +51,8 @@
       <el-form-item label="地区" prop="profile.user_area_group_id">
         <el-tree-select v-model="drawerProps.row!.profile.user_area_group_id" :data="areaGroupData" null="True" />
       </el-form-item>
-      <el-form-item label="部门" prop="profile.user_dept_group_ids">
-        <el-tree-select v-model="drawerProps.row!.profile.user_dept_group_ids" :data="deptGroupData" null="True" multiple />
+      <el-form-item label="部门" prop="dept_app_groups">
+        <el-tree-select v-model="drawerProps.row!.dept_app_groups" :data="deptGroupData" null="True" multiple />
       </el-form-item>
       <el-form-item label="上一次登录" prop="last_login">
         <el-input v-model="drawerProps.row!.last_login" readonly></el-input>

@@ -57,8 +57,8 @@ const loginRules = reactive({
 
 const loading = ref(false);
 const loginForm = reactive<Login.ReqLoginForm>({
-  username: "",
-  password: ""
+  username: "admin",
+  password: "123456"
 });
 
 // login

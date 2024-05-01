@@ -70,6 +70,8 @@ export namespace User {
     last_name: string;
     email: string;
     last_login: Date;
+    dept_app_groups: [number] | null;
+    dept_app_group_ids: [number] | null;
   }
 
   export interface UserProfile {
@@ -77,8 +79,7 @@ export namespace User {
     address: string;
     gender: number | null;
     phone: string;
-    userAreaGroupId: number | null;
-    userDeptGroupIds: [number] | null;
+    user_area_group_id: number | null;
   }
   export interface ResUserList extends BaseUser {
     profile: UserProfile;
